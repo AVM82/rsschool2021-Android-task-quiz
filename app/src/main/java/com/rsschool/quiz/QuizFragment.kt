@@ -14,7 +14,7 @@ class QuizFragment : Fragment() {
 
     private var _binding: FragmentQuizBinding? = null
     private val binding
-        get() = _binding!!
+        get() = requireNotNull(_binding)
 
 
     override fun onCreateView(
@@ -33,19 +33,10 @@ class QuizFragment : Fragment() {
                 val rb = RadioButton(context)
                 rb.text = key
                 rb.height = 150
-                rb.textSize = 20F
                 rb.id = View.generateViewId()
                 binding.radioGroup.addView(rb)
             }
         }
-
-
-        // set text for the radio button
-
-        // assign an automatically generated id to the radio button
-
-        // add radio button to the radio group
-
 
         return binding.root
     }
