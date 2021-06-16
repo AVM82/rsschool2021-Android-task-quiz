@@ -15,6 +15,7 @@ class QuizFragment : Fragment() {
 
     interface QuizFragmentListener {
         fun onNextButtonClick(pos: Int)
+        fun onPreviousButton(pos: Int)
     }
 
     private var quizFragmentListener: QuizFragmentListener? = null
@@ -34,12 +35,14 @@ class QuizFragment : Fragment() {
                 .fromJson(it.getString("options"), Question::class.java)
         }
         showQuestion(question)
+        val position = arguments?.getInt("position") ?: 0
+        if (position == 0) binding.previousButton.isEnabled = false
 
-        binding.nextButton.setOnClickListener {
-            arguments?.getInt("position")
-                ?.let { pos -> quizFragmentListener?.onNextButtonClick(pos + 1) }
-        }
 
+
+        binding.toolbar.title = getString(R.string.question, position + 1)
+        binding.nextButton.setOnClickListener { quizFragmentListener?.onNextButtonClick(position) }
+        binding.previousButton.setOnClickListener { quizFragmentListener?.onPreviousButton(position) }
         return binding.root
     }
 

@@ -8,6 +8,7 @@ import com.rsschool.quiz.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
 
     private lateinit var binding: ActivityMainBinding
+    private var answer: Map<String, String> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +19,12 @@ class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
     }
 
     override fun onNextButtonClick(pos: Int) {
-        binding.viewPager2.setCurrentItem(pos, false)
+        binding.viewPager2.setCurrentItem(pos + 1, false)
+    }
+
+    override fun onPreviousButton(pos: Int) {
+        if (pos > 0) {
+            binding.viewPager2.setCurrentItem(pos - 1, false)
+        }
     }
 }
