@@ -13,7 +13,8 @@ class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.viewPager2.adapter = QuizAdapter(this)
+        val quizAdapter = QuizAdapter(this)
+        binding.viewPager2.adapter = quizAdapter
         binding.viewPager2.isUserInputEnabled = false
         setContentView(binding.root)
     }

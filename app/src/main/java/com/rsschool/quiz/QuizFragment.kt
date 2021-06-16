@@ -39,21 +39,31 @@ class QuizFragment : Fragment() {
         if (position == 0) binding.previousButton.isEnabled = false
 
 
-
         binding.toolbar.title = getString(R.string.question, position + 1)
         binding.nextButton.setOnClickListener { quizFragmentListener?.onNextButtonClick(position) }
         binding.previousButton.setOnClickListener { quizFragmentListener?.onPreviousButton(position) }
+
+        binding.radioGroup.setOnCheckedChangeListener { rg, i ->
+            run {
+                val r = rg.getChildAt(i % 10) as RadioButton
+//                Toast.makeText(activity, r.text, Toast.LENGTH_LONG).show()
+//                quizFragmentListener?.onNextButtonClick(position)
+            }
+        }
         return binding.root
     }
 
     private fun showQuestion(question: Question?) {
         binding.question.text = question?.text ?: "error"
+        var index = 0
         question?.options?.forEach { (key, _) ->
             run {
                 val radioButton = RadioButton(context)
                 radioButton.text = key
+//                radioButton.text = (question.id * 10 + (++index)).toString()
                 radioButton.height = 150
-                radioButton.id = View.generateViewId()
+                if (index == 3) radioButton.isChecked = true
+                radioButton.id = question.id * 10 + (index++)
                 binding.radioGroup.addView(radioButton)
             }
         }

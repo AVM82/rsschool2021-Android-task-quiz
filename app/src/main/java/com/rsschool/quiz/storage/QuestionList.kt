@@ -5,6 +5,7 @@ import com.rsschool.quiz.model.Question
 fun makeQuestionList() =
     listOf(
         Question(
+            1,
             "What does the !! operator do?", mapOf(
                 "It converts any value to non-null type and throw an exception if the value is in fact null" to true,
                 "It returns the left-hand operand if the operand is not null; otherwise it return the right hand operand" to false,
@@ -14,6 +15,7 @@ fun makeQuestionList() =
             )
         ),
         Question(
+            2,
             "What is to in the example below: val test = 33 to 42", mapOf(
                 "A syntax error" to false,
                 "An infix extension function creating a Pair(33, 42)" to true,
@@ -23,6 +25,7 @@ fun makeQuestionList() =
             )
         ),
         Question(
+            3,
             "What is the correct way to declare a variable of integer type in Kotlin", mapOf(
                 "int i = 42" to false,
                 "var i : int = 42" to false,
@@ -31,6 +34,7 @@ fun makeQuestionList() =
                 "var int i = 42" to false
             )
         ), Question(
+            4,
             "Under which license is Kotlin available?", mapOf(
                 "MIT" to false,
                 "Apache 2" to true,
@@ -39,6 +43,7 @@ fun makeQuestionList() =
                 "Kotlin is closed source, commercial software" to false
             )
         ), Question(
+            5,
             "What are Kotlin coroutines?", mapOf(
                 "These are functions which accept other functions as arguments or return them" to false,
                 "It`s Kotlin`s term for class method" to false,
