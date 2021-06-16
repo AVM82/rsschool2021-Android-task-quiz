@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rsschool.quiz.adapter.QuizAdapter
 import com.rsschool.quiz.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -13,6 +13,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.viewPager2.adapter = QuizAdapter(this)
+        binding.viewPager2.isUserInputEnabled = false
         setContentView(binding.root)
+    }
+
+    override fun onNextButtonClick(pos: Int) {
+        binding.viewPager2.setCurrentItem(pos, false)
     }
 }

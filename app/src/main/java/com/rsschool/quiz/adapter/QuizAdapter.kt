@@ -15,9 +15,12 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = questionList.size
 
     override fun createFragment(position: Int): Fragment {
-        return QuizFragment.newInstance().apply {
+        return QuizFragment().apply {
             arguments =
-                bundleOf("options" to GsonParser.getInstance().toJson(questionList[position]))
+                bundleOf(
+                    "options" to GsonParser.getInstance().toJson(questionList[position]),
+                    "position" to position
+                )
         }
     }
 }
