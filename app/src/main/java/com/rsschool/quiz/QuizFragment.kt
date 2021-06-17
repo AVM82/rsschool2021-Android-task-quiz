@@ -10,10 +10,7 @@ import androidx.fragment.app.Fragment
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.model.Answer
 import com.rsschool.quiz.model.Question
-import com.rsschool.quiz.utils.ANSWER
-import com.rsschool.quiz.utils.GsonParser
-import com.rsschool.quiz.utils.OPTIONS
-import com.rsschool.quiz.utils.POSITION
+import com.rsschool.quiz.utils.*
 
 class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fragment() {
 
@@ -44,6 +41,9 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
             binding.previousButton.isEnabled = false
             binding.toolbar.navigationIcon = null
         }
+        if (arguments?.getBoolean(SUBMIT) == true) {
+            binding.nextButton.text = getString(R.string.submit)
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             quizListener?.onPreviousButton()
@@ -51,6 +51,7 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         binding.toolbar.title = getString(R.string.question, position + 1)
         binding.nextButton.setOnClickListener { quizListener?.onNextButtonClick() }
         binding.previousButton.setOnClickListener { quizListener?.onPreviousButton() }
+
 
         binding.radioGroup.setOnCheckedChangeListener { radioGroup, index ->
             run {

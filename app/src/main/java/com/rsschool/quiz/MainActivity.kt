@@ -8,13 +8,11 @@ import com.rsschool.quiz.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), QuizListener {
 
     private lateinit var binding: ActivityMainBinding
-    private var answer: Map<String, String> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val quizAdapter = QuizAdapter(this)
-        binding.viewPager2.adapter = quizAdapter
+        binding.viewPager2.adapter = QuizAdapter(this)
         binding.viewPager2.isUserInputEnabled = false
         setContentView(binding.root)
     }
@@ -31,8 +29,10 @@ class MainActivity : AppCompatActivity(), QuizListener {
         }
     }
 
-    override fun onBackToQuizButton() {
-        binding.viewPager2.adapter?.notifyDataSetChanged()
-        onPreviousButton()
+    override fun onRestartQuizButton() {
+        binding.viewPager2.apply {
+            adapter = QuizAdapter(this@MainActivity)
+            setCurrentItem(0, false)
+        }
     }
 }

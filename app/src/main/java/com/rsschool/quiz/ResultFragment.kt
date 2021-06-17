@@ -22,7 +22,7 @@ class ResultFragment : Fragment() {
         _binding = FragmentResultBinding.inflate(inflater, container, false)
         binding.result.text = getString(R.string.result, "${arguments?.getInt(RESULT)} %")
         binding.backButton.setOnClickListener {
-            quizListener?.onBackToQuizButton()
+            quizListener?.onRestartQuizButton()
         }
         return binding.root
     }

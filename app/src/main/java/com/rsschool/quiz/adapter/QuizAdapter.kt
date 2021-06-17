@@ -27,7 +27,8 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity),
                     bundleOf(
                         OPTIONS to GsonParser.getInstance().toJson(question),
                         POSITION to position,
-                        ANSWER to answerList[question.id]?.id
+                        ANSWER to answerList[question.id]?.id,
+                        SUBMIT to (position == questionList.size - 1)
                     )
             }
         } else {
