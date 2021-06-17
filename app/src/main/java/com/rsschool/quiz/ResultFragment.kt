@@ -21,10 +21,17 @@ class ResultFragment : Fragment() {
     ): View {
         _binding = FragmentResultBinding.inflate(inflater, container, false)
         binding.result.text = getString(R.string.result, "${arguments?.getInt(RESULT)} %")
+        setListeners()
+        return binding.root
+    }
+
+    private fun setListeners() {
         binding.backButton.setOnClickListener {
             quizListener?.onRestartQuizButton()
         }
-        return binding.root
+        binding.closeButton.setOnClickListener {
+            activity?.finish()
+        }
     }
 
     override fun onAttach(context: Context) {

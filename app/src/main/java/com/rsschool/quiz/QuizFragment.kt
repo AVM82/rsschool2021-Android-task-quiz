@@ -49,9 +49,14 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
             quizListener?.onPreviousButton()
         }
         binding.toolbar.title = getString(R.string.question, position + 1)
-        binding.nextButton.setOnClickListener { quizListener?.onNextButtonClick() }
-        binding.previousButton.setOnClickListener { quizListener?.onPreviousButton() }
+        serListeners(position)
+        return binding.root
+    }
 
+    private fun serListeners(position: Int) {
+        binding.nextButton.setOnClickListener { quizListener?.onNextButtonClick() }
+
+        binding.previousButton.setOnClickListener { quizListener?.onPreviousButton() }
 
         binding.radioGroup.setOnCheckedChangeListener { radioGroup, index ->
             run {
@@ -63,7 +68,6 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
                 )
             }
         }
-        return binding.root
     }
 
     private fun showQuestion(question: Question?, answerId: Int) {
