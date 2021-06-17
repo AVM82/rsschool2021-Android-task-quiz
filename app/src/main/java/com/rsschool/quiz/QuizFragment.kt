@@ -15,7 +15,7 @@ import com.rsschool.quiz.utils.GsonParser
 import com.rsschool.quiz.utils.OPTIONS
 import com.rsschool.quiz.utils.POSITION
 
-class QuizFragment(var onRadioButtonListener: RadioButtonListener?) : Fragment() {
+class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fragment() {
 
     interface QuizFragmentListener {
         fun onNextButtonClick(pos: Int)
@@ -45,9 +45,14 @@ class QuizFragment(var onRadioButtonListener: RadioButtonListener?) : Fragment()
         val answerId = arguments?.getInt(ANSWER) ?: 0
         showQuestion(question = question, answerId = answerId)
         val position = arguments?.getInt(POSITION) ?: 0
-        if (position == 0) binding.previousButton.isEnabled = false
+        if (position == 0) {
+            binding.previousButton.isEnabled = false
+            binding.toolbar.navigationIcon = null
+        }
 
-
+        binding.toolbar.setNavigationOnClickListener {
+            quizFragmentListener?.onPreviousButton(position)
+        }
         binding.toolbar.title = getString(R.string.question, position + 1)
         binding.nextButton.setOnClickListener { quizFragmentListener?.onNextButtonClick(position) }
         binding.previousButton.setOnClickListener { quizFragmentListener?.onPreviousButton(position) }
@@ -55,6 +60,7 @@ class QuizFragment(var onRadioButtonListener: RadioButtonListener?) : Fragment()
         binding.radioGroup.setOnCheckedChangeListener { radioGroup, index ->
             run {
                 val radioButton = radioGroup.getChildAt(index - 1) as RadioButton
+                binding.nextButton.isEnabled = true
                 onRadioButtonListener?.onClickRadioButton(
                     questionId = position + 1,
                     answer = Answer(id = index, text = radioButton.text.toString())
