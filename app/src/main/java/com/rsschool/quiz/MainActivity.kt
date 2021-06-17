@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rsschool.quiz.adapter.QuizAdapter
 import com.rsschool.quiz.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
+class MainActivity : AppCompatActivity(), QuizListener {
 
     private lateinit var binding: ActivityMainBinding
     private var answer: Map<String, String> = mutableMapOf()
@@ -19,13 +19,20 @@ class MainActivity : AppCompatActivity(), QuizFragment.QuizFragmentListener {
         setContentView(binding.root)
     }
 
-    override fun onNextButtonClick(pos: Int) {
-        binding.viewPager2.setCurrentItem(pos + 1, false)
+    override fun onNextButtonClick() {
+        binding.viewPager2.apply {
+            setCurrentItem(currentItem + 1, false)
+        }
     }
 
-    override fun onPreviousButton(pos: Int) {
-        if (pos > 0) {
-            binding.viewPager2.setCurrentItem(pos - 1, false)
+    override fun onPreviousButton() {
+        binding.viewPager2.apply {
+            setCurrentItem(currentItem - 1, false)
         }
+    }
+
+    override fun onBackToQuizButton() {
+        binding.viewPager2.adapter?.notifyDataSetChanged()
+        onPreviousButton()
     }
 }

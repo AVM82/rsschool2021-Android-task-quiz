@@ -17,16 +17,11 @@ import com.rsschool.quiz.utils.POSITION
 
 class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fragment() {
 
-    interface QuizFragmentListener {
-        fun onNextButtonClick(pos: Int)
-        fun onPreviousButton(pos: Int)
-    }
-
     interface RadioButtonListener {
         fun onClickRadioButton(questionId: Int, answer: Answer)
     }
 
-    private var quizFragmentListener: QuizFragmentListener? = null
+    private var quizListener: QuizListener? = null
     private var _binding: FragmentQuizBinding? = null
     private val binding
         get() = requireNotNull(_binding)
@@ -51,11 +46,11 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            quizFragmentListener?.onPreviousButton(position)
+            quizListener?.onPreviousButton()
         }
         binding.toolbar.title = getString(R.string.question, position + 1)
-        binding.nextButton.setOnClickListener { quizFragmentListener?.onNextButtonClick(position) }
-        binding.previousButton.setOnClickListener { quizFragmentListener?.onPreviousButton(position) }
+        binding.nextButton.setOnClickListener { quizListener?.onNextButtonClick() }
+        binding.previousButton.setOnClickListener { quizListener?.onPreviousButton() }
 
         binding.radioGroup.setOnCheckedChangeListener { radioGroup, index ->
             run {
@@ -87,14 +82,14 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is QuizFragmentListener) {
-            quizFragmentListener = context
+        if (context is QuizListener) {
+            quizListener = context
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        quizFragmentListener = null
+        quizListener = null
     }
 
     override fun onDestroyView() {
