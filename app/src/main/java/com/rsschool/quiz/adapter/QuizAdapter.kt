@@ -21,7 +21,7 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity),
 
     override fun createFragment(position: Int): Fragment {
         return if (position < questionList.size) {
-            QuizFragment(this).apply {
+            QuizFragment.newInstance(this).apply {
                 val question = questionList[position]
                 arguments =
                     bundleOf(

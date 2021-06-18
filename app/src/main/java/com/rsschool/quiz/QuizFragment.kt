@@ -2,22 +2,28 @@ package com.rsschool.quiz
 
 import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.annotation.StyleRes
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.model.Answer
 import com.rsschool.quiz.model.Question
 import com.rsschool.quiz.utils.*
+import kotlin.math.abs
 
-class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fragment() {
+
+class QuizFragment : Fragment() {
 
     interface RadioButtonListener {
         fun onClickRadioButton(questionId: Int, answer: Answer)
     }
 
+    private var position: Int = 0
+    private var onRadioButtonListener: RadioButtonListener? = null
     private var quizListener: QuizListener? = null
     private var _binding: FragmentQuizBinding? = null
     private val binding
@@ -28,8 +34,26 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        position = arguments?.getInt(POSITION) ?: 0
+        when (if (position > 4) abs((position % 10) - 5) else position) {
+            0 -> setTheme(R.style.Theme_Quiz_First)
+            1 -> setTheme(R.style.Theme_Quiz_Second)
+            2 -> setTheme(R.style.Theme_Quiz_Third)
+            3 -> setTheme(R.style.Theme_Quiz_Fourth)
+            4 -> setTheme(R.style.Theme_Quiz_Fifth)
+            else -> setTheme(R.style.Theme_Quiz)
+        }
+
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private fun setTheme(@StyleRes theme: Int) {
+        activity?.setTheme(theme)
+        val typedValue = TypedValue()
+        context?.theme?.resolveAttribute(android.R.attr.statusBarColor, typedValue, true)
+        val window = activity?.window
+        window?.statusBarColor = typedValue.data
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +66,6 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         val answerId = arguments?.getInt(ANSWER) ?: 0
         if (answerId > 0) binding.nextButton.isEnabled = true
         showQuestion(question = question, answerId = answerId)
-        val position = arguments?.getInt(POSITION) ?: 0
         if (position == 0) {
             binding.previousButton.isEnabled = false
             binding.toolbar.navigationIcon = null
@@ -106,5 +129,13 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         _binding = null
         onRadioButtonListener = null
         super.onDestroyView()
+    }
+
+    companion object {
+        fun newInstance(radioButtonListener: RadioButtonListener): QuizFragment {
+            val fragment = QuizFragment()
+            fragment.onRadioButtonListener = radioButtonListener
+            return fragment
+        }
     }
 }

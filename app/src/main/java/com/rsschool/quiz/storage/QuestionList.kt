@@ -33,7 +33,8 @@ fun makeQuestionList() =
                 "var i : Int = 42" to true,
                 "var int i = 42" to false
             )
-        ), Question(
+        ),
+        Question(
             4,
             "Under which license is Kotlin available?", mapOf(
                 "MIT" to false,
@@ -42,7 +43,8 @@ fun makeQuestionList() =
                 "UFO" to false,
                 "Kotlin is closed source, commercial software" to false
             )
-        ), Question(
+        ),
+        Question(
             5,
             "What are Kotlin coroutines?", mapOf(
                 "These are functions which accept other functions as arguments or return them" to false,
