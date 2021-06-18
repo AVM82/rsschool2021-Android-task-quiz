@@ -23,18 +23,24 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
     private val binding
         get() = requireNotNull(_binding)
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val question = arguments?.let {
             GsonParser.getInstance()
                 .fromJson(it.getString(OPTIONS), Question::class.java)
         }
         val answerId = arguments?.getInt(ANSWER) ?: 0
+        if (answerId > 0) binding.nextButton.isEnabled = true
         showQuestion(question = question, answerId = answerId)
         val position = arguments?.getInt(POSITION) ?: 0
         if (position == 0) {
@@ -50,7 +56,6 @@ class QuizFragment(private var onRadioButtonListener: RadioButtonListener?) : Fr
         }
         binding.toolbar.title = getString(R.string.question, position + 1)
         serListeners(position)
-        return binding.root
     }
 
     private fun serListeners(position: Int) {

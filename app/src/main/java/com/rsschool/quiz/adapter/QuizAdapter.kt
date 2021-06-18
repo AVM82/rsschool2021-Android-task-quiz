@@ -34,20 +34,31 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity),
         } else {
             ResultFragment().apply {
                 arguments = bundleOf(
-                    RESULT to calculateResult()
+                    RESULT to calculateResult(),
+                    EMAIL_TEXT to makeEmailText()
                 )
             }
         }
     }
 
-    private fun calculateResult(): Int {
-        var result = 0
+    private fun makeEmailText(): String {
+        var text = ""
         answerList.forEach { (key, value) ->
             run {
-                result += questionList.filter { it.id == key && it.options[value.text] == true }.size
+                text += "${key}) ${questionList[key - 1].text} \n\n You answer: ${value.text}\n\n"
             }
         }
-        return result * 100 / questionList.size
+        return text
+    }
+
+    private fun calculateResult(): Int {
+        var correctAnswerCount = 0
+        answerList.forEach { (key, value) ->
+            run {
+                correctAnswerCount += questionList.filter { it.id == key && it.options[value.text] == true }.size
+            }
+        }
+        return correctAnswerCount * 100 / questionList.size
     }
 
     override fun onClickRadioButton(questionId: Int, answer: Answer) {
