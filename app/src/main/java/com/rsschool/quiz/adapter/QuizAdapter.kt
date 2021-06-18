@@ -1,5 +1,6 @@
 package com.rsschool.quiz.adapter
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -16,28 +17,30 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity),
     private val questionList = makeQuestionList()
     private var answerList = mutableMapOf<Int, Answer>()
 
-
     override fun getItemCount(): Int = questionList.size + 1
 
-    override fun createFragment(position: Int): Fragment {
-        return if (position < questionList.size) {
-            QuizFragment.newInstance(this).apply {
-                val question = questionList[position]
-                arguments =
-                    bundleOf(
-                        OPTIONS to GsonParser.getInstance().toJson(question),
-                        POSITION to position,
-                        ANSWER to answerList[question.id]?.id,
-                        SUBMIT to (position == questionList.size - 1)
-                    )
-            }
-        } else {
-            ResultFragment().apply {
-                arguments = bundleOf(
-                    RESULT to calculateResult(),
-                    EMAIL_TEXT to makeEmailText()
+    override fun createFragment(position: Int): Fragment =
+        if (position < questionList.size) createQuizFragment(position) else createResultFragment()
+
+    private fun createQuizFragment(position: Int): QuizFragment {
+        return QuizFragment.newInstance(this).apply {
+            val question = questionList[position]
+            arguments =
+                bundleOf(
+                    OPTIONS to GsonParser.getInstance().toJson(question),
+                    POSITION to position,
+                    ANSWER to answerList[question.id]?.id,
+                    SUBMIT to (position == questionList.size - 1)
                 )
-            }
+        }
+    }
+
+    private fun createResultFragment(): ResultFragment {
+        return ResultFragment().apply {
+            arguments = bundleOf(
+                RESULT to calculateResult(),
+                EMAIL_TEXT to makeEmailText()
+            )
         }
     }
 
@@ -63,5 +66,6 @@ class QuizAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity),
 
     override fun onClickRadioButton(questionId: Int, answer: Answer) {
         answerList[questionId] = answer
+        Log.d("ANSWER", answerList.toString())
     }
 }

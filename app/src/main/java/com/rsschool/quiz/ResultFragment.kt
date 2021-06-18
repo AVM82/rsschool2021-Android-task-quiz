@@ -38,7 +38,7 @@ class ResultFragment : Fragment() {
     private fun setListeners() {
 
         binding.backButton.setOnClickListener {
-            quizListener?.onRestartQuizButton()
+            quizListener?.onRestartQuizButtonClick()
         }
 
         binding.closeButton.setOnClickListener {
@@ -51,10 +51,8 @@ class ResultFragment : Fragment() {
                 putExtra(Intent.EXTRA_SUBJECT, "Quiz results")
                 putExtra(Intent.EXTRA_TEXT, "$result\n\n ${arguments?.getString(EMAIL_TEXT)}")
             }
-
             startActivity(emailIntent)
         }
-
     }
 
     override fun onAttach(context: Context) {
@@ -67,5 +65,10 @@ class ResultFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         quizListener = null
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

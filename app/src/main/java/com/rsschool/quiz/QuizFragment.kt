@@ -23,6 +23,7 @@ class QuizFragment : Fragment() {
     }
 
     private var position: Int = 0
+    private var question: Question? = null
     private var onRadioButtonListener: RadioButtonListener? = null
     private var quizListener: QuizListener? = null
     private var _binding: FragmentQuizBinding? = null
@@ -59,7 +60,7 @@ class QuizFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val question = arguments?.let {
+        question = arguments?.let {
             GsonParser.getInstance()
                 .fromJson(it.getString(OPTIONS), Question::class.java)
         }
@@ -74,26 +75,28 @@ class QuizFragment : Fragment() {
             binding.nextButton.text = getString(R.string.submit)
         }
 
-        binding.toolbar.setNavigationOnClickListener {
-            quizListener?.onPreviousButton()
-        }
         binding.toolbar.title = getString(R.string.question, position + 1)
-        serListeners(position)
+        setListeners()
     }
 
-    private fun serListeners(position: Int) {
+    private fun setListeners() {
+
+        binding.toolbar.setNavigationOnClickListener { quizListener?.onPreviousButtonClick() }
+
         binding.nextButton.setOnClickListener { quizListener?.onNextButtonClick() }
 
-        binding.previousButton.setOnClickListener { quizListener?.onPreviousButton() }
+        binding.previousButton.setOnClickListener { quizListener?.onPreviousButtonClick() }
 
         binding.radioGroup.setOnCheckedChangeListener { radioGroup, index ->
             run {
                 val radioButton = radioGroup.getChildAt(index - 1) as RadioButton
                 binding.nextButton.isEnabled = true
-                onRadioButtonListener?.onClickRadioButton(
-                    questionId = position + 1,
-                    answer = Answer(id = index, text = radioButton.text.toString())
-                )
+                question?.let {
+                    onRadioButtonListener?.onClickRadioButton(
+                        questionId = it.id,
+                        answer = Answer(id = index, text = radioButton.text.toString())
+                    )
+                }
             }
         }
     }
